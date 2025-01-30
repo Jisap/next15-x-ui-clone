@@ -10,7 +10,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="flex justify-between sm:bg-blue-300 md:bg-green-300 lg:bg-pink-400 xl:bg-yellow-200 2xl:bg-slate-400">
+        <div className="flex justify-between xsm:bg-yellow-200 lg:bg-green-500 xxl:bg-pink-400">
           <div>
             <LeftBar />
           </div>
