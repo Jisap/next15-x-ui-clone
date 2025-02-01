@@ -3,6 +3,7 @@ import Image from './Image'
 import PostInfo from './PostInfo'
 import PostInteractions from './PostInteractions'
 import { imagekit } from './utils';
+import Video from './Video';
 
 interface FileDetailsResponse {
   width: number;
@@ -74,7 +75,7 @@ const Post = async() => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta a quibusdam, recusandae animi incidunt tempora quasi, omnis aut dolore vel eum distinctio dolorum asperiores accusantium, aspernatur soluta aliquam enim quam?
           </p>
 
-          {fileDetails && (
+          {fileDetails && fileDetails.fileType ==="image" ? (
             <Image 
               path={fileDetails.filePath}
               alt="post"
@@ -82,6 +83,11 @@ const Post = async() => {
               h={fileDetails.height}
               className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
             />
+          ) : (
+              <Video
+                path={fileDetails.filePath}
+                className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
+              />
           )}
 
           <PostInteractions />
