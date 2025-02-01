@@ -116,8 +116,7 @@ const ImageEditor = ({
             </div>
           </div>
           <div
-            className={`cursor-pointer py-1 px-4 rounded-full text-black ${settings.sensitive ? "bg-red-500" : "bg-white"
-              }`}
+            className={`cursor-pointer py-1 px-4 rounded-full text-black ${settings.sensitive ? "bg-red-500" : "bg-white"}`}
             onClick={() => handleChangeSensitive(!settings.sensitive)}
           >
             Sensitive

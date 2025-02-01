@@ -80,6 +80,19 @@ const Share = () => {
           )
         }
 
+        {media?.type.includes("video") && previewURL && (
+          <div className="relative">
+            <video src={previewURL} controls />
+            <div
+              className="absolute top-2 right-2 bg-black bg-opacity-50 text-white h-8 w-8 flex items-center justify-center rounded-full cursor-pointer font-bold text-sm"
+              onClick={() => setMedia(null)}
+            >
+              X
+            </div>
+          </div>
+        )}
+
+
         {isEditorOpen && previewURL && (
           <ImageEditor
             onClose={() => setIsEditorOpen(false)}
