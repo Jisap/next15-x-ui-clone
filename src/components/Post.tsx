@@ -75,7 +75,7 @@ const Post = async() => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta a quibusdam, recusandae animi incidunt tempora quasi, omnis aut dolore vel eum distinctio dolorum asperiores accusantium, aspernatur soluta aliquam enim quam?
           </p>
 
-          {fileDetails && fileDetails.fileType ==="image" ? (
+          {fileDetails && fileDetails.fileType === "image" ? (
             <Image 
               path={fileDetails.filePath}
               alt="post"

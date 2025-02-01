@@ -50,7 +50,7 @@ const Share = () => {
 
         {/* Preview Image */}
         {
-          previewURL && (
+          media?.type.includes("image") && previewURL && (
             <div className='relative rounded-xl overflow-hidden'>
               <NextImage 
                 src={previewURL}
