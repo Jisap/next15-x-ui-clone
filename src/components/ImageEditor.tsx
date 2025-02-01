@@ -44,10 +44,14 @@ const ImageEditor = ({
             </svg>
             <h1 className="font-bold text-xl">Media Settings</h1>
           </div>
-          <button className="py-2 px-4 rounded-full bg-white text-black font-bold" onClick={onClose}>
+          <button 
+            className="py-2 px-4 rounded-full bg-white text-black font-bold" 
+            onClick={onClose}
+          >
             Save
           </button>
         </div>
+
         {/* IMAGE CONTAINER */}
         <div className="w-[600px] h-[600px] flex items-center">
           <Image
@@ -63,9 +67,11 @@ const ImageEditor = ({
               }`}
           />
         </div>
+
         {/* SETTINGS */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center gap-8">
+            {/* Original */}
             <div
               className="flex items-center gap-2 cursor-pointer"
               onClick={() => handleChangeType("original")}
@@ -82,6 +88,8 @@ const ImageEditor = ({
               </svg>
               Original
             </div>
+
+            {/* Wide */}
             <div
               className="flex items-center gap-2 cursor-pointer"
               onClick={() => handleChangeType("wide")}
@@ -98,6 +106,8 @@ const ImageEditor = ({
               </svg>
               Wide
             </div>
+
+            {/* Square */}
             <div
               className="flex items-center gap-2 cursor-pointer"
               onClick={() => handleChangeType("square")}
@@ -115,8 +125,15 @@ const ImageEditor = ({
               Square
             </div>
           </div>
+
+          {/* Sensitive */}
           <div
-            className={`cursor-pointer py-1 px-4 rounded-full text-black ${settings.sensitive ? "bg-red-500" : "bg-white"}`}
+            className={
+              `cursor-pointer py-1 px-4 rounded-full text-black 
+              ${settings.sensitive 
+                ? "bg-red-500" 
+                : "bg-white"}`
+            }
             onClick={() => handleChangeSensitive(!settings.sensitive)}
           >
             Sensitive
