@@ -12,10 +12,10 @@ export const shareAction = async (                                          // S
   const buffer = Buffer.from(bytes);                                        // convierte los bytes en un buffer, necesario para la subida a ImageKit.
 
   const transformation = `w-600, ${settings.type === "square"               // Se define la transformación de imagen según el type
-      ? "ar-1-1"
-      : settings.type === "wide"
+      ? "ar-1-1"                                                            // Si es square se aplica aspect-ratio: 1/1  
+      : settings.type === "wide"                                            // Si es wide se aplica aspect-ratio: 16/9
         ? "ar-16-9"
-        : ""
+        : ""                                                                // Si no es ni square ni wide se aplica la transformación por defecto w-600
     }`;
 
   imagekit.upload(                                                          // Subida a ImageKit
