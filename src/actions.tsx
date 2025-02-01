@@ -23,7 +23,7 @@ export const shareAction = async (                                          // S
       file: buffer,
       fileName: file.name,
       folder: "/posts",
-      ...(file.type.includes("image") && {
+      ...(file.type.includes("image") && {                                  // Si el tipo de archivo es imagen se aplica la transformación
         transformation: {
           pre: transformation,
         },
