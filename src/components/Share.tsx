@@ -157,7 +157,9 @@ const Share = () => {
               className='cursor-pointer'
             />
           </div>
-          <button className='bg-white text-black font-bold rounded-full  py-2 px-4'>Post</button>
+          <button className='bg-white text-black font-bold rounded-full  py-2 px-4'>
+            Post
+          </button>
         </div>
       </div>
     </form>
