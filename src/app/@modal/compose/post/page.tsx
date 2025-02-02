@@ -2,7 +2,7 @@
 
 import Image from '@/components/Image';
 import { useRouter } from "next/navigation";
-import { useEffect } from 'react';
+
 
 // @modal -> el contenido de @modal se renderizará en paralelo con otras rutas,
 // permitiendo que se muestre un modal sin perder el contexto de la página actual.
@@ -11,7 +11,11 @@ import { useEffect } from 'react';
 
 const PostModal = () => {
 
+  const router = useRouter();
 
+  const closeModal = () => {
+    router.back();
+  };
 
   
   
@@ -21,7 +25,7 @@ const PostModal = () => {
         
         {/* Top */}
         <div className="flex items-center justify-between">
-          <div className="cursor-pointer">
+          <div className="cursor-pointer" onClick={closeModal}>
             X
           </div>
           <div className="text-iconBlue font-bold">Drafts</div>
