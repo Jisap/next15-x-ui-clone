@@ -5,6 +5,7 @@ import Link from "next/link";
 const UserPage = () => {
   return (
     <div>
+      {/* Profile Title */}
       <div className="flex items-center gap-8 sticky top-0 backdrop-blur-md p-4 z-10 bg-[#00000084]">
         <Link href="/">
           <Image 
@@ -18,7 +19,7 @@ const UserPage = () => {
       </div>
 
       <div className="">
-        {/* COVER & AVATAR CONTAINER */}
+        {/* Cover & avatar container */}
         <div className="relative w-full">
           <div className="w-full aspect-[3/1] relative">
             <Image 
@@ -40,6 +41,7 @@ const UserPage = () => {
           </div>
         </div>
 
+        {/* Buttons actions */}
         <div className="flex w-full items-center justify-end gap-2 p-2">
           <div className="w-9 h-9 flex items-center justify-center rounded-full border-[1px] border-gray-500 cursor-pointer">
             <Image 
@@ -69,7 +71,48 @@ const UserPage = () => {
             Follow
           </button>
         </div>
+
+        {/* User Details */}
+        <div className="p-4 flex flex-col gap-2">
+          <div className="">
+            <h1 className="text-2xl font-bold">Jisap Dev</h1>
+            <span className="text-textGray text-sm">@jisapWebDev</span>
+          </div>
+
+          <p>Jisap Dev Youtube Channel</p>
+
+          {/* Job & Location & Date Joined */}
+          <div className="flex gap-4 text-textGray text-[15px]">
+            <div className="flex items-center gap-2">
+              <Image
+                path="icons/userLocation.svg"
+                alt="location"
+                w={20}
+                h={20}
+              />
+              <span>SPAIN</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Image path="icons/date.svg" alt="date" w={20} h={20} />
+              <span>Joined May 2021</span>
+            </div>
+          </div>
+
+          {/* Followings & Followers */}
+          <div className="flex gap-4">
+            <div className="flex items-center gap-2">
+              <span className="font-bold">100</span>
+              <span className="text-textGray text-[15px]">Followers</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold">100</span>
+              <span className="text-textGray text-[15px]">Followings</span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <Feed />
     </div>
   )
 }
