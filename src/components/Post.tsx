@@ -16,7 +16,7 @@ interface FileDetailsResponse {
 
 
 
-const Post = async() => {
+const Post = async ({ type }: { type?: "status" | "comment" }) => {
 
   const getFileDetails = async (fileId: string): Promise<FileDetailsResponse> => {
     return new Promise((resolve, reject) => {
