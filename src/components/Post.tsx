@@ -4,6 +4,7 @@ import PostInfo from './PostInfo'
 import PostInteractions from './PostInteractions'
 import { imagekit } from './utils';
 import Video from './Video';
+import Link from 'next/link';
 
 interface FileDetailsResponse {
   width: number;
@@ -48,9 +49,12 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
         <span>Jisap reposted</span>
       </div>
       {/* Post content */}
-      <div className='flex gap-4'>
+      <div className={`flex gap-4 ${type === "status" && "flex-col"}`}>
         {/* Avatar */}
-        <div className='relative w-10 h-10 rounded-full overflow-hidden'>
+        <div className={
+          `${type === "status" && "hidden"} 
+           relative w-10 h-10 rounded-full overflow-hidden`
+        }>
           <Image 
             path="general/avatar.png"
             alt="avatar"
@@ -62,16 +66,42 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
 
         {/* Content */}
         <div className='flex-1 flex flex-col gap-2'>
-          <div className='flex items-center justify-between gap-2'>
-            <div className='flex items-center gap-2 flex-wrap'>
-              <h1 className='text-md font-bold'>Jisap</h1>
-              <span className='text-textGray'>@jisapDev</span>
-              <span className='text-textGray'>2 days ago</span>
-            </div>
+          <div className='w-full flex justify-between'>
+            <Link href={`/lamaWebDev`} className="flex gap-4">
+              <div className={
+                `${type !== "status" && "hidden"} 
+                relative w-10 h-10 rounded-full overflow-hidden`
+              }>
+                <Image
+                  path="general/avatar.png"
+                  alt="avatar"
+                  h={100}
+                  w={100}
+                  tr={true}
+                />
+              </div>
+              <div className={
+                `flex items-center gap-2 flex-wrap 
+                ${type === "status" && "flex-col gap-0 !items-start"}`
+              }>
+                <h1 className='text-md font-bold'>Jisap</h1>
+                <span className={
+                  `text-textGray 
+                  ${type === "status" && "text-sm"}`
+                }>
+                  @jisapDev
+                </span>
+                {type !== "status" && (
+                  <span className="text-textGray">1 day ago</span>
+                )}
+              </div>
+            </Link>
+            
             <PostInfo />
           </div>
 
-          <p>
+          <Link href={`/jisapDev/status/123`}></Link>
+          <p className={`${type === "status" && "text-lg"}`}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta a quibusdam, recusandae animi incidunt tempora quasi, omnis aut dolore vel eum distinctio dolorum asperiores accusantium, aspernatur soluta aliquam enim quam?
           </p>
 
