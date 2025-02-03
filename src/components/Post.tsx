@@ -100,10 +100,11 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
             <PostInfo />
           </div>
 
-          <Link href={`/jisapDev/status/123`}></Link>
-          <p className={`${type === "status" && "text-lg"}`}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta a quibusdam, recusandae animi incidunt tempora quasi, omnis aut dolore vel eum distinctio dolorum asperiores accusantium, aspernatur soluta aliquam enim quam?
-          </p>
+          <Link href={`/jisapDev/status/123`}>
+            <p className={`${type === "status" && "text-lg"}`}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta a quibusdam, recusandae animi incidunt tempora quasi, omnis aut dolore vel eum distinctio dolorum asperiores accusantium, aspernatur soluta aliquam enim quam?
+            </p>
+          </Link>
 
           {fileDetails && fileDetails.fileType === "image" ? (
             <Image 
@@ -118,6 +119,10 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
                 path={fileDetails.filePath}
                 className={fileDetails.customMetadata?.sensitive ? "blur-lg" : ""}
               />
+          )}
+
+          {type === "status" && (
+            <span className="text-textGray">8:41 PM · Dec 5, 2024</span>
           )}
 
           <PostInteractions />
