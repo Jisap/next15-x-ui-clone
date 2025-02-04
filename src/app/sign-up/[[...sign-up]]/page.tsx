@@ -87,7 +87,8 @@ const SignUpPage = () => {
             </div>    
           </SignUp.Step>
 
-          {/* <SignUp.Step name="continue" className="flex flex-col gap-4">
+          {/* username para el caso de login con google */}
+          <SignUp.Step name="continue" className="flex flex-col gap-4">
             <Clerk.Field name="username">
               <Clerk.Input 
                 placeholder="username" 
@@ -97,7 +98,7 @@ const SignUpPage = () => {
             </Clerk.Field>
 
             <SignUp.Action submit className="w-72 text-center text-iconBlue underline">Continue</SignUp.Action>
-          </SignUp.Step> */}
+          </SignUp.Step>
 
           <SignUp.Step name="verifications">
             <SignUp.Strategy name="email_code">
