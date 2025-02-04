@@ -6,8 +6,8 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
   const userProfileId = searchParams.get("user");
-  const page = searchParams.get("cursor");
-  const LIMIT = 3;
+  // const page = searchParams.get("cursor");
+  // const LIMIT = 3;
 
   const { userId } = await auth();
 
@@ -31,32 +31,38 @@ export async function GET(request: NextRequest) {
         },
       };
 
-  const postIncludeQuery = {
-    user: { select: { displayName: true, username: true, img: true } },
-    _count: { select: { likes: true, rePosts: true, comments: true } },
-    likes: { where: { userId: userId }, select: { id: true } },
-    rePosts: { where: { userId: userId }, select: { id: true } },
-    saves: { where: { userId: userId }, select: { id: true } },
-  };
-
   const posts = await prisma.post.findMany({
-    where: whereCondition,
-    include: {
-      rePost: {
-        include: postIncludeQuery,
-      },
-      ...postIncludeQuery,
-    },
-    take: LIMIT,
-    skip: (Number(page) - 1) * LIMIT,
-    orderBy: { createdAt: "desc" }
+    where: whereCondition
   });
 
-  const totalPosts = await prisma.post.count({ where: whereCondition });
+  return Response.json({ posts });
 
-  const hasMore = Number(page) * LIMIT < totalPosts;
+  // const postIncludeQuery = {
+  //   user: { select: { displayName: true, username: true, img: true } },
+  //   _count: { select: { likes: true, rePosts: true, comments: true } },
+  //   likes: { where: { userId: userId }, select: { id: true } },
+  //   rePosts: { where: { userId: userId }, select: { id: true } },
+  //   saves: { where: { userId: userId }, select: { id: true } },
+  // };
+
+  // const posts = await prisma.post.findMany({
+  //   where: whereCondition,
+  //   include: {
+  //     rePost: {
+  //       include: postIncludeQuery,
+  //     },
+  //     ...postIncludeQuery,
+  //   },
+  //   take: LIMIT,
+  //   skip: (Number(page) - 1) * LIMIT,
+  //   orderBy: { createdAt: "desc" }
+  // });
+
+  //const totalPosts = await prisma.post.count({ where: whereCondition });
+
+  //const hasMore = Number(page) * LIMIT < totalPosts;
 
   // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  return Response.json({ posts, hasMore });
+  //return Response.json({ posts, hasMore });
 }
