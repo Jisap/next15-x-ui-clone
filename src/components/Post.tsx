@@ -17,18 +17,18 @@ interface FileDetailsResponse {
 
 
 
-const Post = async ({ type }: { type?: "status" | "comment" }) => {
+const Post = ({ type }: { type?: "status" | "comment" }) => {
 
-  const getFileDetails = async (fileId: string): Promise<FileDetailsResponse> => {
-    return new Promise((resolve, reject) => {
-        imagekit.getFileDetails(fileId, function (error, result) {
-          if (error) reject(error);
-          else resolve(result as FileDetailsResponse);
-        });
-      });
-  }
+  // const getFileDetails = async (fileId: string): Promise<FileDetailsResponse> => {
+  //   return new Promise((resolve, reject) => {
+  //       imagekit.getFileDetails(fileId, function (error, result) {
+  //         if (error) reject(error);
+  //         else resolve(result as FileDetailsResponse);
+  //       });
+  //     });
+  // }
 
-  const fileDetails = await getFileDetails("679e4ef7432c4764165e9d57");
+  // const fileDetails = await getFileDetails("679e4ef7432c4764165e9d57");
   // console.log(fileDetails);
 
   //TODO: añadir rutas dinámicas
@@ -102,7 +102,7 @@ const Post = async ({ type }: { type?: "status" | "comment" }) => {
             <PostInfo />
           </div>
 
-          <Link href={`/jisapDev/status/123`}>
+          <Link href={`/jisap/status/123`}>
             <p className={`${type === "status" && "text-lg"}`}>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta a quibusdam, recusandae animi incidunt tempora quasi, omnis aut dolore vel eum distinctio dolorum asperiores accusantium, aspernatur soluta aliquam enim quam?
             </p>
