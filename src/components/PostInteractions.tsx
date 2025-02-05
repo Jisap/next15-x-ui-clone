@@ -1,8 +1,7 @@
 "use client";
 
-import React from 'react'
 
-const PostInteractions = () => {
+const PostInteractions = ({ count } : {count:{ likes:number; rePosts:number; comments:number; }}) => {
   return (
     <div className='flex items-center justify-between my-2 gap-4 lg:gap-16 text-textGray'>
       <div className='flex items-center gap-2 justify-between flex-1'>
@@ -19,7 +18,7 @@ const PostInteractions = () => {
               className='fill-textGray group-hover:fill-iconBlue transition-all duration-300'
             />
           </svg>
-          <span className='group-hover:text-iconBlue text-sm transition-all duration-300'>157</span>
+          <span className='group-hover:text-iconBlue text-sm transition-all duration-300'>{count.comments}</span>
         </div>
         {/* Repost */}
         <div className='flex items-center gap-2 cursor-pointer group'>
@@ -34,7 +33,7 @@ const PostInteractions = () => {
               className='fill-textGray group-hover:fill-iconGreen transition-all duration-300'
             />
           </svg>
-          <span className='group-hover:text-iconGreen text-sm transition-all duration-300'>157</span>
+          <span className='group-hover:text-iconGreen text-sm transition-all duration-300'>{count.rePosts}</span>
         </div>
         {/* Likes */}
         <div className='flex items-center gap-2 cursor-pointer group'>
@@ -49,7 +48,7 @@ const PostInteractions = () => {
               className='fill-textGray group-hover:fill-iconPink transition-all duration-300'
             />
           </svg>
-          <span className='group-hover:text-iconPink text-sm transition-all duration-300'>157</span>
+          <span className='group-hover:text-iconPink text-sm transition-all duration-300'>{count.likes}</span>
         </div>
       </div>
       
