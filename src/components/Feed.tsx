@@ -27,18 +27,19 @@ const Feed = async ({ userProfileId }: { userProfileId?: string }) => {
 
   const posts = await prisma.post.findMany({
     where: whereCondition,
-    include: {                                                               // Deben incluirse dos relaciones
-      user: {select: {displayName: true, username: true, img: true}},        // Información del usuario que creo la publicación
-      rePost: {                                                              // Información sobre la publicación original si la publicación actual es un reenvío
+    include: {                                                                // Deben incluirse dos relaciones
+      user: {select: {displayName: true, username: true, img: true}},         // Información del usuario que creo la publicación
+      rePost: {                                                               // Información sobre la publicación original si la publicación actual es un reenvío
         include: {
-          user: {select: {displayName: true, username: true, img: true}},
-          _count: {select: { likes: true, rePosts: true, comments: true } // Información sobre la cantidad de likes, reposts y comentarios
-          }
+          user: { select: { displayName: true, username: true, img: true } }, // Datos del usuario que creó la publicación original
+          _count: { select: { likes: true, rePosts: true, comments: true } }, // Cantidad de interacciones (likes, reposts, comentarios) de la publicación original
+          likes: { where: { userId: userId }, select: { id: true } },         // Verifica si el usuario autenticado ha dado like a la publicación original
         }
       },
-      _count: {
-        select: {likes: true, rePosts: true, comments: true} // Información sobre la cantidad de likes, reposts y comentarios
-      }
+      _count: { select: { likes: true, rePosts: true, comments: true } },     // Cantidad de interacciones (likes, reposts, comentarios) de la publicación actual
+      likes: { where: { userId: userId }, select: { id: true } },             // Verifica si el usuario autenticado ha dado like a esta publicación
+      //rePosts: { where: { userId: userId }, select: { id: true } },           // Verifica si el usuario autenticado ha hecho un repost de esta publicación
+      //saves: { where: { userId: userId }, select: { id: true } },             // Verifica si el usuario autenticado ha guardado esta publicación
     },
     take: 3,
     skip: 0,
