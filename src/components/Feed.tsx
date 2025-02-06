@@ -35,12 +35,13 @@ const Feed = async ({ userProfileId }: { userProfileId?: string }) => {
           _count: { select: { likes: true, rePosts: true, comments: true } }, // Cantidad de interacciones (likes, reposts, comentarios) de la publicación original
           likes: { where: { userId: userId }, select: { id: true } },         // Verifica si el usuario autenticado ha dado like a la publicación original
           rePosts: { where: { userId: userId }, select: { id: true } },
+          saves: { where: { userId: userId }, select: { id: true } },
         }
       },
       _count: { select: { likes: true, rePosts: true, comments: true } },     // Cantidad de interacciones (likes, reposts, comentarios) de la publicación actual
       likes: { where: { userId: userId }, select: { id: true } },             // Verifica si el usuario autenticado ha dado like a esta publicación
       rePosts: { where: { userId: userId }, select: { id: true } },           // Verifica si el usuario autenticado ha hecho un repost de esta publicación
-      //saves: { where: { userId: userId }, select: { id: true } },             // Verifica si el usuario autenticado ha guardado esta publicación
+      saves: { where: { userId: userId }, select: { id: true } },             // Verifica si el usuario autenticado ha guardado esta publicación
     },
     take: 3,
     skip: 0,

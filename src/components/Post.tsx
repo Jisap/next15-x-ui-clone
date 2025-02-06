@@ -28,6 +28,7 @@ type PostWithDetails = PostType & { // Post + info del user que creo la publicac
       };
       likes: {id: number}[];
       rePosts: {id: number}[];
+      saves: {id: number}[];
 
     }) | null;
 
@@ -38,6 +39,7 @@ type PostWithDetails = PostType & { // Post + info del user que creo la publicac
   };
   likes: { id: number }[]; 
   rePosts: { id: number }[];
+  saves: { id: number }[];
 }
 
 const Post = ({ 
@@ -150,7 +152,7 @@ const Post = ({
             count={originalPost._count}
             isLiked={!!originalPost.likes.length}
             isReposted={!!originalPost.rePosts.length}
-            //isSaved={!!originalPost.saves.length}
+            isSaved={!!originalPost.saves.length}
           />
         </div>
       </div>
