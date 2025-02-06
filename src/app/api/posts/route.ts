@@ -40,11 +40,12 @@ export async function GET(request: NextRequest) {
           user: { select: { displayName: true, username: true, img: true } },
           _count: { select: { likes: true, rePosts: true, comments: true } },  // Información sobre la cantidad de likes, reposts y comentarios,
           likes: { where: { userId: userId }, select: { id: true } },
+          rePosts: { where: { userId: userId }, select: { id: true } },
         },
       },
       _count: {select: { likes: true, rePosts: true, comments: true } },       // Información sobre la cantidad de likes, reposts y comentarios  
       likes: { where: { userId: userId }, select: { id: true } },
-      //rePosts: { where: { userId: userId }, select: { id: true } },
+      rePosts: { where: { userId: userId }, select: { id: true } },
       //saves: { where: { userId: userId }, select: { id: true } },
     },
     take: LIMIT,

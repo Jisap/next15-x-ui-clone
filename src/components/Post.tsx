@@ -27,6 +27,7 @@ type PostWithDetails = PostType & { // Post + info del user que creo la publicac
         comments: number;
       };
       likes: {id: number}[];
+      rePosts: {id: number}[];
 
     }) | null;
 
@@ -36,6 +37,7 @@ type PostWithDetails = PostType & { // Post + info del user que creo la publicac
     comments: number;
   };
   likes: { id: number }[]; 
+  rePosts: { id: number }[];
 }
 
 const Post = ({ 
@@ -147,7 +149,7 @@ const Post = ({
           <PostInteractions 
             count={originalPost._count}
             isLiked={!!originalPost.likes.length}
-            //isRePosted={!!originalPost.rePosts.length}
+            isReposted={!!originalPost.rePosts.length}
             //isSaved={!!originalPost.saves.length}
           />
         </div>
