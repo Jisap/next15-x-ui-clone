@@ -26,6 +26,16 @@ const StatusPage = async({ params }: PageProps) => {
       likes: { where: { userId: userId }, select: { id: true } },             // Verifica si el usuario autenticado ha dado like a esta publicación
       rePosts: { where: { userId: userId }, select: { id: true } },           // Verifica si el usuario autenticado ha hecho un repost de esta publicación
       saves: { where: { userId: userId }, select: { id: true } },             // Verifica si el usuario autenticado ha guardado esta publicación
+      comments: {
+        orderBy: { createdAt: "desc" },
+        include: {
+          user: { select: { displayName: true, username: true, img: true } },
+          _count: { select: { likes: true, rePosts: true, comments: true } },
+          likes: { where: { userId: userId }, select: { id: true } },
+          rePosts: { where: { userId: userId }, select: { id: true } },
+          saves: { where: { userId: userId }, select: { id: true } },
+        },
+      }
     },
   })
 
@@ -48,7 +58,11 @@ const StatusPage = async({ params }: PageProps) => {
         type="status" 
         post={post}  
       />
-      {/* <Comments /> */}
+      <Comments
+        comments={post.comments}
+        postId={post.id}
+        username={post.user.username}
+      />
     </div>
   );
 };
