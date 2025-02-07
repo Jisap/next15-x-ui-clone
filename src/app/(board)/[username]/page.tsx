@@ -12,12 +12,12 @@ const UserPage = async ({ params }: { params: Promise<{ username: string }>}) =>
 
   const username = (await params).username;
 
-  const user = await prisma.user.findUnique({
-    where: { username: username },
-    include: {
-      _count: { select: { followers: true, followings: true } },
-      followings: userId ? { where: { followerId: userId } } : undefined, // Se determina si el usuario logueado sigue al usuario cuyo perfil se está consultando
-    },
+  const user = await prisma.user.findUnique({                               // Se consulta la tabla de user
+    where: { username: username },                                          // buscando el usuario cuyo username es el que se pasa por parámetro
+    include: {                                                              // e incluyendo las relaciones
+      _count: { select: { followers: true, followings: true } },            // _count
+      followings: userId ? { where: { followerId: userId } } : undefined,   // y followings pero solo si el usuario logueado (userId) sigue al usuario cuyo perfil se está consultando (user)
+    }, 
   });
 
   if (!user) return notFound();
