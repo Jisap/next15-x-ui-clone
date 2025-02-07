@@ -35,8 +35,8 @@ model User {
 
   saves SavedPosts[]
 
-  followers  Follow[] @relation("UserFollowers")
-  followings Follow[] @relation("UserFollowings")
+  followers  Follow[] @relation("UserFollowers")  // Quien te sigue a ti
+  followings Follow[] @relation("UserFollowings") // A quien sigues tu
 }
 
 model Post {
@@ -95,8 +95,8 @@ model Follow {
   createdAt DateTime @default(now())
 
   // RELATIONS
-  followerId  String
-  followingId String
+  followerId  String // El que sigue
+  followingId String // El que es seguido
 
   follower  User @relation("UserFollowers", fields: [followerId], references: [id])
   following User @relation("UserFollowings", fields: [followingId], references: [id])

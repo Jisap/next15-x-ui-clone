@@ -1,4 +1,5 @@
 import Feed from "@/components/Feed";
+import FollowButton from "@/components/FollowButton";
 import Image from "@/components/Image";
 import { prisma } from "@/prisma";
 import { auth } from "@clerk/nextjs/server";
@@ -15,7 +16,7 @@ const UserPage = async ({ params }: { params: Promise<{ username: string }>}) =>
     where: { username: username },
     include: {
       _count: { select: { followers: true, followings: true } },
-      followings: userId ? { where: { followerId: userId } } : undefined,
+      followings: userId ? { where: { followerId: userId } } : undefined, // Se determina si el usuario logueado sigue al usuario cuyo perfil se está consultando
     },
   });
 
@@ -34,7 +35,7 @@ const UserPage = async ({ params }: { params: Promise<{ username: string }>}) =>
             h={24} 
           />
         </Link>
-        <h1 className="font-bold text-lg">Lama Dev</h1>
+        <h1 className="font-bold text-lg">{user.displayName}</h1>
       </div>
 
       <div className="">
@@ -42,7 +43,7 @@ const UserPage = async ({ params }: { params: Promise<{ username: string }>}) =>
         <div className="relative w-full">
           <div className="w-full aspect-[3/1] relative">
             <Image 
-              path="general/banner.jpg" 
+              path={user.cover || "general/noBanner.png" }
               alt="" 
               w={600} 
               h={200} 
@@ -51,7 +52,7 @@ const UserPage = async ({ params }: { params: Promise<{ username: string }>}) =>
           </div>
           <div className="w-1/5 aspect-square rounded-full overflow-hidden border-4 border-black bg-gray-300 absolute left-4 -translate-y-1/2">
             <Image 
-              path="general/avatar.png" 
+              path={user.img || "general/noAvatar.png"}
               alt="" 
               w={100} 
               h={100} 
@@ -86,45 +87,56 @@ const UserPage = async ({ params }: { params: Promise<{ username: string }>}) =>
               h={20} 
             />
           </div>
-          <button className="py-2 px-4 bg-white text-black font-bold rounded-full">
-            Follow
-          </button>
+          { userId && (                                 // Si existe el usuario logueado
+            <FollowButton                               // Mostrar boton de seguir al usuario cuyo perfil se está consultando
+              userId={user.id}                          // pasandole su id
+              isFollowed={!!user.followings.length}     // y si está seguido o no
+            />
+          )}
         </div>
 
         {/* User Details */}
         <div className="p-4 flex flex-col gap-2">
           <div className="">
-            <h1 className="text-2xl font-bold">Jisap Dev</h1>
-            <span className="text-textGray text-sm">@jisapWebDev</span>
+            <h1 className="text-2xl font-bold">{user.displayName}</h1>
+            <span className="text-textGray text-sm">@{user.username}</span>
           </div>
 
-          <p>Jisap Dev Youtube Channel</p>
+          <p>{user.bio} Channel</p>
 
           {/* Job & Location & Date Joined */}
           <div className="flex gap-4 text-textGray text-[15px]">
-            <div className="flex items-center gap-2">
-              <Image
-                path="icons/userLocation.svg"
-                alt="location"
-                w={20}
-                h={20}
-              />
-              <span>SPAIN</span>
-            </div>
+            {user.location && (
+              <div className="flex items-center gap-2">
+                <Image
+                  path="icons/userLocation.svg"
+                  alt="location"
+                  w={20}
+                  h={20}
+                />
+                <span>{user.location}</span>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <Image path="icons/date.svg" alt="date" w={20} h={20} />
-              <span>Joined May 2021</span>
+              <span>Joined {" "}
+                { new Date(user.createdAt.toString())
+                   .toLocaleDateString("en-US",{
+                     month: "long", year: "numeric" 
+                  })
+                }
+              </span>
             </div>
           </div>
 
           {/* Followings & Followers */}
           <div className="flex gap-4">
             <div className="flex items-center gap-2">
-              <span className="font-bold">100</span>
+              <span className="font-bold">{user._count.followers}</span>
               <span className="text-textGray text-[15px]">Followers</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-bold">100</span>
+              <span className="font-bold">{user._count.followings}</span>
               <span className="text-textGray text-[15px]">Followings</span>
             </div>
           </div>
