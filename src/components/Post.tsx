@@ -50,9 +50,8 @@ const Post = ({
     post: PostWithDetails
   }) => {
 
-  const originalPost = post.rePost || post; // Su el post no es reposteado originalPost = post en caso contrario sera = rePost
+  const originalPost = post.rePost || post; // Si el post no es reposteado originalPost = post en caso contrario sera = rePost
 
-  //TODO: añadir rutas dinámicas
 
   return (
     <div className='p-4 border-y-[1px] border-borderGray'>
@@ -129,7 +128,7 @@ const Post = ({
             <PostInfo />
           </div>
 
-          <Link href={`/jisap/status/123`}>
+          <Link href={`/${originalPost.user.username}/status/${originalPost.id}`} className="flex gap-4">
             <p className={`${type === "status" && "text-lg"}`}>
               {originalPost.desc}
             </p>
