@@ -1,17 +1,26 @@
 "use client";
 
+import { likePost } from "@/action";
+
 
 const PostInteractions = ({ 
+  postId,
   count, 
   isLiked,
   isReposted,
   isSaved,
 } : {
+  postId:number;
   count:{ likes:number; rePosts:number; comments:number; }
   isLiked: boolean;
   isReposted: boolean;
   isSaved: boolean;
 }) => {
+
+  const likeAction = async () => {
+    await likePost(postId)
+  }
+
   return (
     <div className='flex items-center justify-between my-2 gap-4 lg:gap-16 text-textGray'>
       <div className='flex items-center gap-2 justify-between flex-1'>
@@ -46,20 +55,22 @@ const PostInteractions = ({
           <span className={`${isReposted ? "text-iconGreen" : "text-textGray"} group-hover:text-iconGreen text-sm transition-all duration-300`}>{count.rePosts}</span>
         </div>
         {/* Likes */}
-        <div className='flex items-center gap-2 cursor-pointer group'>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M16.697 5.5c-1.222-.06-2.679.51-3.89 2.16l-.805 1.09-.806-1.09C9.984 6.01 8.526 5.44 7.304 5.5c-1.243.07-2.349.78-2.91 1.91-.552 1.12-.633 2.78.479 4.82 1.074 1.97 3.257 4.27 7.129 6.61 3.87-2.34 6.052-4.64 7.126-6.61 1.111-2.04 1.03-3.7.477-4.82-.561-1.13-1.666-1.84-2.908-1.91zm4.187 7.69c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z"
-              className={`${isLiked ? "fill-iconPink" : "fill-textGray"} group-hover:fill-iconPink transition-all duration-300`}
-            />
-          </svg>
-          <span className={`${isLiked ? "text-iconPink" : "text-textGray"} group-hover:text-iconPink text-sm transition-all duration-300`}>{count.likes}</span>
-        </div>
+        <form action={likeAction}>
+          <button className='flex items-center gap-2 cursor-pointer group'>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M16.697 5.5c-1.222-.06-2.679.51-3.89 2.16l-.805 1.09-.806-1.09C9.984 6.01 8.526 5.44 7.304 5.5c-1.243.07-2.349.78-2.91 1.91-.552 1.12-.633 2.78.479 4.82 1.074 1.97 3.257 4.27 7.129 6.61 3.87-2.34 6.052-4.64 7.126-6.61 1.111-2.04 1.03-3.7.477-4.82-.561-1.13-1.666-1.84-2.908-1.91zm4.187 7.69c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z"
+                className={`${isLiked ? "fill-iconPink" : "fill-textGray"} group-hover:fill-iconPink transition-all duration-300`}
+              />
+            </svg>
+            <span className={`${isLiked ? "text-iconPink" : "text-textGray"} group-hover:text-iconPink text-sm transition-all duration-300`}>{count.likes}</span>
+          </button>
+        </form>
       </div>
       
       <div className='flex items-center gap-2'>
