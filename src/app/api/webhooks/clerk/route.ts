@@ -61,6 +61,7 @@ export async function POST(req: Request) {
           email: JSON.parse(body).data.email_addresses[0].email_address,
         }
       })
+      return new Response("User created", { status: 200 });
     } catch (error) {
       console.log(error);
       return new Response('Error: Failed to create user', {
