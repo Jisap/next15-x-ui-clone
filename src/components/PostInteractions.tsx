@@ -1,6 +1,7 @@
 "use client";
 
-import { likePost } from "@/action";
+import { likePost, rePost, savePost } from "@/action";
+import { useUser } from "@clerk/nextjs";
 import { useOptimistic, useState } from "react";
 
 
@@ -8,21 +9,23 @@ const PostInteractions = ({
   postId,
   count, 
   isLiked,
-  isReposted,
+  isRePosted,
   isSaved,
 } : {
   postId:number;
   count:{ likes:number; rePosts:number; comments:number; }
   isLiked: boolean;
-  isReposted: boolean;
+  isRePosted: boolean;
   isSaved: boolean;
 }) => {
 
-  const [state, setState] = useState({ // Estado regular
+  const { user } = useUser();
+
+  const [state, setState] = useState({                        // Estado regular
     likes: count.likes,
     isLiked: isLiked,
     rePosts: count.rePosts,
-    isReposted,
+    isRePosted,
     isSaved
   });
 
@@ -38,6 +41,31 @@ const PostInteractions = ({
     }) 
   };
 
+  const rePostAction = async () => {
+    addOptimisticCount("rePost")
+    await rePost(postId)
+    setState((prev) => {                                       
+      return {
+        ...prev,
+        rePosts: prev.isRePosted ? prev.rePosts - 1 : prev.rePosts + 1,
+        isRePosted: !prev.isRePosted
+      }
+    }) 
+  }
+
+  const saveAction = async () => {
+    addOptimisticCount("save")
+    await savePost(postId)
+    setState((prev) => {                                       
+      return {
+        ...prev,
+        isSaved: !prev.isSaved,
+      }
+    }) 
+  }
+
+  
+
   const [optimisticCount, addOptimisticCount] = useOptimistic(  // Estado optimista
     state,                                                      // Estado inicial 
     (prev, type: "like" | "rePost" | "save") => {               // Función de actualización
@@ -52,8 +80,8 @@ const PostInteractions = ({
     if (type === "rePost") {
       return {
         ...prev,
-        rePost: prev.isReposted ? prev.rePosts - 1 : prev.rePosts + 1,
-        isReposted: !prev.isReposted
+        rePosts: prev.isRePosted ? prev.rePosts - 1 : prev.rePosts + 1,
+        isRePosted: !prev.isRePosted
       };
     }
     if (type === "save") {
@@ -85,22 +113,24 @@ const PostInteractions = ({
           <span className='group-hover:text-iconBlue text-sm transition-all duration-300'>{count.comments}</span>
         </div>
         {/* Repost */}
-        <div className='flex items-center gap-2 cursor-pointer group'>
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="20" 
-            height="20" 
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M4.75 3.79l4.603 4.3-1.706 1.82L6 8.38v7.37c0 .97.784 1.75 1.75 1.75H13V20H7.75c-2.347 0-4.25-1.9-4.25-4.25V8.38L1.853 9.91.147 8.09l4.603-4.3zm11.5 2.71H11V4h5.25c2.347 0 4.25 1.9 4.25 4.25v7.37l1.647-1.53 1.706 1.82-4.603 4.3-4.603-4.3 1.706-1.82L18 15.62V8.25c0-.97-.784-1.75-1.75-1.75z"
-              className={`${optimisticCount.isReposted ? "fill-iconGreen" : "fill-textGray"} group-hover:fill-iconGreen transition-all duration-300`}
-            />
-          </svg>
-          <span className={`${optimisticCount.isReposted ? "text-iconGreen" : "text-textGray"} group-hover:text-iconGreen text-sm transition-all duration-300`}>
+        <form action={rePostAction}>
+          <button className='flex items-center gap-2 cursor-pointer group'>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M4.75 3.79l4.603 4.3-1.706 1.82L6 8.38v7.37c0 .97.784 1.75 1.75 1.75H13V20H7.75c-2.347 0-4.25-1.9-4.25-4.25V8.38L1.853 9.91.147 8.09l4.603-4.3zm11.5 2.71H11V4h5.25c2.347 0 4.25 1.9 4.25 4.25v7.37l1.647-1.53 1.706 1.82-4.603 4.3-4.603-4.3 1.706-1.82L18 15.62V8.25c0-.97-.784-1.75-1.75-1.75z"
+                className={`${optimisticCount.isRePosted ? "fill-iconGreen" : "fill-textGray"} group-hover:fill-iconGreen transition-all duration-300`}
+              />
+            </svg>
+          </button>
+          <span className={`${optimisticCount.isRePosted ? "text-iconGreen" : "text-textGray"} group-hover:text-iconGreen text-sm transition-all duration-300`}>
             {optimisticCount.rePosts}
           </span>
-        </div>
+        </form>
         {/* Likes */}
         <form action={likeAction}>
           <button className='flex items-center gap-2 cursor-pointer group'>
@@ -122,8 +152,11 @@ const PostInteractions = ({
         </form>
       </div>
       
-      <div className='flex items-center gap-2'>
-        <div className='cursor-pointer group'>
+      <form 
+        action={saveAction}
+        className='flex items-center gap-2'
+      >
+        <button className='cursor-pointer group'>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -135,7 +168,7 @@ const PostInteractions = ({
               className={`${optimisticCount.isSaved ? "fill-iconBlue" : "fill-textGray"} group-hover:fill-iconBlue transition-all duration-300`}
             />
           </svg>
-        </div>
+        </button>
         <div className='cursor-pointer group'>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -149,7 +182,7 @@ const PostInteractions = ({
             />
           </svg>
         </div>
-      </div>
+      </form>
     </div>
   )
 }

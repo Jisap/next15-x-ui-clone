@@ -151,7 +151,7 @@ const Post = ({
             postId={originalPost.id}
             count={originalPost._count}
             isLiked={!!originalPost.likes.length}
-            isReposted={!!originalPost.rePosts.length}
+            isRePosted={!!originalPost.rePosts.length}
             isSaved={!!originalPost.saves.length}
           />
         </div>
