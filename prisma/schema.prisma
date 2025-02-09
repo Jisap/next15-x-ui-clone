@@ -53,13 +53,15 @@ model Post {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  rePostId Int?
-  rePost   Post?  @relation("RePosts", fields: [rePostId], references: [id])
-  rePosts  Post[] @relation("RePosts")
+  // Cuando se crea un post normal parentPostId es null (repost)
+  rePostId Int?                                                                             //  Es el ID del post original que se está "reposteando". Es opcional porque no todos los posts son reposts.
+  rePost   Post?  @relation("RePosts", fields: [rePostId], references: [id])                //  Es el post original que se está "reposteando"
+  rePosts  Post[] @relation("RePosts")                                                      //  Es un array de Posts que son reposts del post actual
 
-  parentPostId Int?
-  parentPost   Post?  @relation("PostComments", fields: [parentPostId], references: [id])
-  comments     Post[] @relation("PostComments")
+  // Cuando se crea un post normal parentPostId es null (comentario)
+  parentPostId Int?                                                                         // Es el Id del post original al que se está comentando. Cuando creas un comentario, es técnicamente un nuevo Post pero con el parentPostId establecido al ID del post al que estás comentando
+  parentPost   Post?  @relation("PostComments", fields: [parentPostId], references: [id])   // Es el post original al que se está comentando
+  comments     Post[] @relation("PostComments")                                             // Es un array de Posts que son comentarios del post actual
 
   likes Like[]
 

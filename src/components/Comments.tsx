@@ -1,6 +1,11 @@
+"use client"
+
+import { useUser } from "@clerk/nextjs";
 import Image from "./Image"
 import Post from "./Post"
 import { Post as PostType } from "@prisma/client";
+import { useActionState } from "react";
+import { addComment } from "@/action";
 
 type CommentWithDetails = PostType & {
   user: { displayName: string | null; username: string; img: string | null };
@@ -19,23 +24,65 @@ const Comments = ({
   postId: number;
   username: string;
 }) => {
+
+  const { isLoaded, isSignedIn, user} = useUser();
+
+  const [state, formAction, isPending] = useActionState(addComment, { // formAction ejecutará la action addComment cuando se envíe el formulario
+    success: false,                                                   // prveState = success y error + formData que viene del input
+    error: false,
+  });
+
   return (
     <div className=''>
-      <form className='flex items-center justify-between gap-4 p-4 '>
-        <div className='relative w-10 h-10 rounded-full overflow-hidden'>
-          <Image 
-            path="general/avatar.png" 
-            alt="Lama Dev" 
-            w={100} 
-            h={100} 
-            tr={true} 
+      {user && (
+        <form 
+          action={formAction}
+          className='flex items-center justify-between gap-4 p-4 '
+        >
+          <div className='relative w-10 h-10 rounded-full overflow-hidden'>
+            <Image 
+              src={user?.imageUrl || "general/avatar.png"} 
+              alt="avatar" 
+              w={100} 
+              h={100} 
+              tr={true} 
+            />
+          </div>
+          <input 
+            type="text"
+            name="desc" 
+            className="flex-1 bg-transparent outline-none p-2 text-xl" 
+            placeholder="Post your reply" 
           />
-        </div>
-        <input type="text" className="flex-1 bg-transparent outline-none p-2 text-xl" placeholder="Post your reply" />
-        <button className="py-2 px-4 font-bold bg-white text-black rounded-full">
-          Reply
-        </button>
-      </form>
+          <input
+            type="string"
+            name="username"
+            hidden
+            readOnly
+            value={username} // Viene de post.user.username en la petición a la api en comments.tsx (Username del autor del post original)
+          />
+          <input 
+            type="number" 
+            name="postId" 
+            hidden 
+            readOnly 
+            value={postId} // Viene de [postId] en los params de la url (Id del post al que se comenta)
+          />
+          <button 
+            className="py-2 px-4 font-bold bg-white text-black rounded-full disabled:cursor-not-allowed disabled:bg-slate-200"
+            disabled={isPending}
+          >
+            {isPending ? "Replying..." : "Reply"}
+          </button>
+        </form>
+      )}
+
+      {state.error && (
+        <span className="text-red-300 p-4">
+          Something went wrong!
+        </span>
+      )}
+
        {comments.map((comment) => (
         <div key={comment.id}>
           <Post 
