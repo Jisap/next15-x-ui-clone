@@ -5,6 +5,7 @@ import PostInteractions from './PostInteractions'
 import Link from 'next/link';
 import { Post as PostType } from '@prisma/client';
 import { format } from 'timeago.js';
+import Video from './Video';
 
 
 type PostWithDetails = PostType & { // Post + info del user que creo la publicación + info de los post reenviados (usuarios que crearon su post)
@@ -135,12 +136,24 @@ const Post = ({
           </Link>
 
           {originalPost.img && (
-            <Image 
-              path={originalPost.img}
-              alt=""
-              w={600}
-              h={600}
-            />
+            <div className="overflow-hidden">
+              <Image 
+                path={originalPost.img}
+                alt=""
+                w={600}
+                h={originalPost.imgHeight || 600}
+                className={originalPost.isSensitive ? "blur-3xl" : ""}
+              />
+            </div>
+          )}
+
+          {originalPost.video && (
+            <div className="rounded-lg overflow-hidden">
+              <Video
+                path={originalPost.video}
+                className={originalPost.isSensitive ? "blur-3xl" : ""}
+              />
+            </div>
           )}
 
           {type === "status" && (

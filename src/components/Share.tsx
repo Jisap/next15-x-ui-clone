@@ -1,8 +1,7 @@
 "use client"
 
-import React, { useActionState, useState } from 'react'
+import React, { useActionState, useEffect, useRef, useState } from 'react'
 import Image from './Image'
-import { shareAction } from '@/actions';
 import NextImage from "next/image";
 import ImageEditor from './ImageEditor';
 import { useUser } from '@clerk/nextjs';
@@ -35,8 +34,19 @@ const Share = () => {
     error: false,
   });
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    if (state.success) {
+      formRef.current?.reset();
+      setMedia(null);
+      setSettings({ type: "original", sensitive: false });
+    }
+  }, [state]);
+
   return (
     <form 
+      ref={formRef}
       className='p-4 flex gap-4'
       //action={(formData) => shareAction(formData, settings)}  
       action={formAction}
@@ -181,9 +191,17 @@ const Share = () => {
               className='cursor-pointer'
             />
           </div>
-          <button className='bg-white text-black font-bold rounded-full  py-2 px-4'>
-            Post
+          <button 
+            disabled={isPending}
+            className='bg-white text-black font-bold rounded-full  py-2 px-4 disabled:cursor-not-allowed'
+          >
+            {isPending ? "Posting..." : "Post"}
           </button>
+          {state.error && (
+            <p className='text-red-500 p-4 text-sm'>
+              Something went wrong!
+            </p>
+          )}
         </div>
       </div>
     </form>
