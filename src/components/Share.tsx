@@ -1,10 +1,12 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useActionState, useState } from 'react'
 import Image from './Image'
 import { shareAction } from '@/actions';
 import NextImage from "next/image";
 import ImageEditor from './ImageEditor';
+import { useUser } from '@clerk/nextjs';
+import { addPost } from '@/action';
 
 const Share = () => {
 
@@ -26,21 +28,43 @@ const Share = () => {
 
   const previewURL = media ? URL.createObjectURL(media) : null;
 
+  const { user } = useUser();
+
+  const [state, formAction, isPending] = useActionState(addPost, {
+    success: false,
+    error: false,
+  });
+
   return (
     <form 
       className='p-4 flex gap-4'
-      action={(formData) => shareAction(formData, settings)}  
+      //action={(formData) => shareAction(formData, settings)}  
+      action={formAction}
     >
       <div className='relative w-10 h-10 rounded-full overflow-hidden'>
         <Image 
-          path="general/avatar.png"
+          src={user?.imageUrl || "general/avatar.png"} 
           alt='avatar'
           w={100}
           h={100}
           tr={true}
         />
       </div>
-      <div className='flex flex-col flex-1 gap-4'>
+      <div className='flex flex-col flex-1 gap-4'>    
+        <input
+          type="text"
+          name="imgType"
+          value={settings.type} // Los settings se cambian en el editor imagen y se pasan a la acción
+          hidden
+          readOnly
+        />
+        <input
+          type="text"
+          name="isSensitive"
+          value={settings.sensitive ? "true" : "false"}
+          hidden
+          readOnly
+        />
         <input 
           type="text" 
           placeholder='What is happening ?' 
