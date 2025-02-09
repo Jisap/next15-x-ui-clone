@@ -43,7 +43,7 @@ const Share = () => {
     >
       <div className='relative w-10 h-10 rounded-full overflow-hidden'>
         <Image 
-          src={user?.imageUrl || "general/avatar.png"} 
+          src={user?.imageUrl} 
           alt='avatar'
           w={100}
           h={100}

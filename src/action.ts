@@ -135,7 +135,13 @@ export const addPost = async (
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const transformation = `w-600,${imgType === "square" ? "ar-1-1" : imgType === "wide" ? "ar-16-9" : ""}`;
+    const transformation = `w-600,${
+      imgType === "square" 
+        ? "ar-1-1" 
+        : imgType === "wide" 
+          ? "ar-16-9" 
+          : ""
+    }`;
 
     return new Promise((resolve, reject) => {
       imagekit.upload(
@@ -176,14 +182,14 @@ export const addPost = async (
   let imgHeight = 0;
   let video = "";
 
-  if (file.size) {                                                          // Se procesa el archivo si existe
+  if (file.size) {                                                          // Si el file existe se sube a ImageKit
     const result: UploadResponse = await uploadFile(file);
 
-    if (result.fileType === "image") {
+    if (result.fileType === "image") {                                      // Si el file es imagen se guarda la ruta y la altura
       img = result.filePath;
       imgHeight = result.height;
     } else {
-      video = result.filePath;
+      video = result.filePath;                                              // Si el file es video se guarda la ruta
     }
   }
 
