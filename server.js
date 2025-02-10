@@ -9,7 +9,7 @@ const port = 3000;
 const app = next({ dev, hostname, port });                                           // Aqui se inicializa la aplicación con next
 const handler = app.getRequestHandler();
 
-const onlineUsers = []
+let onlineUsers = []
 
 const addUser = (username, socketId) => {
   const isExist = onlineUsers.find(user => user.socketId === socketId)
