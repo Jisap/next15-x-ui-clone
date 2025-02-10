@@ -6,13 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:webhook": "ngrok http --domain longhorn-settled-mullet.ngrok-free.app 3000",
+    "dev:all": "concurrently \"npm run dev:webhook\" \"npm run dev\""
   },
   "dependencies": {
     "@clerk/elements": "^0.22.19",
     "@clerk/nextjs": "^6.10.6",
     "@prisma/client": "^6.3.0",
     "@tanstack/react-query": "^4.36.1",
+    "concurrently": "^9.1.2",
     "imagekit": "^6.0.0",
     "imagekitio-next": "^1.0.1",
     "next": "15.1.0",
