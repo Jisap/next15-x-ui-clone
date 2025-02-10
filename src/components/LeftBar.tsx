@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import React from 'react'
 import Image from './Image';
+import Socket from './Socket';
 
 const LeftBar = () => {
 
@@ -131,6 +132,7 @@ const LeftBar = () => {
         </div>
         <div className='hidden xxl:block cursor-pointer font-bold'>...</div>
       </div>
+      <Socket />
     </div>
   )
 }
