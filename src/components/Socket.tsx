@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { socket } from "../socket";
+import { useUser } from "@clerk/nextjs";
 
 export default function Socket() {
   const [isConnected, setIsConnected] = useState(false);
   const [transport, setTransport] = useState("N/A");
+  
+  const { user } = useUser();
 
   useEffect(() => {
     if (socket.connected) {
@@ -19,6 +22,10 @@ export default function Socket() {
       socket.io.engine.on("upgrade", (transport) => {
         setTransport(transport.name);
       });
+
+      if(user){
+        socket.emit("newUser", user.username);          // Cuando el cliente se conecta al servidor, se envía un evento "newUser" con el nombre de usuario del cliente.
+      }
     }
 
     function onDisconnect() {
@@ -33,7 +40,7 @@ export default function Socket() {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
     };
-  }, []);
+  }, [user]);
 
   return (
     <div>
