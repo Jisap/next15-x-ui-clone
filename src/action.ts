@@ -219,3 +219,26 @@ export const addPost = async (
   }
  
 };
+
+export const followUser = async (targetUserId: string) => {                 // Se recibe como argumento el usuario al que se quiere seguir o dejar de seguir
+  const { userId } = await auth();                                          // Verifica que el usuario esté autenticado
+
+  if (!userId) return;
+
+  const existingFollow = await prisma.follow.findFirst({                    // Busca si ya existe un follow entre los usuarios
+    where: {
+      followerId: userId,        // Quien sigue
+      followingId: targetUserId, // A quien sigue
+    },
+  });
+
+  if (existingFollow) {                                                     // Si existe, lo elimina (unfollow) 
+    await prisma.follow.delete({
+      where: { id: existingFollow.id },
+    });
+  } else {
+    await prisma.follow.create({                                            // Si no existe, lo crea (follow)
+      data: { followerId: userId, followingId: targetUserId },
+    });
+  }
+};
