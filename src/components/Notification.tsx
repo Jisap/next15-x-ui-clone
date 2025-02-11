@@ -56,7 +56,7 @@ const Notification = () => {
         </span>
       </div>
       {open && (
-        <div className="absolute -right-full p-4 rounded-lg bg-white text-black flex flex-col gap-4 w-max">
+        <div className="absolute -right-full p-4 rounded-lg bg-white text-black flex flex-col gap-4 w-max z-50">
           <h1 className="text-xl text-textGray">Notifications</h1>
           {notifications.map((n) => (
             <div

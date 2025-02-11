@@ -55,7 +55,7 @@ const Post = ({
 
 
   return (
-    <div className='p-4 border-y-[1px] border-borderGray'>
+    <div className='p-4 border-y-[1px] border-borderGray relative -z-10'>
       {/* Post Type */}
       {post.rePostId && 
         <div className='flex items-center gap-2 text-sm text-textGray mb-2 font-bold'>
@@ -98,7 +98,7 @@ const Post = ({
             <Link href={`/${originalPost.user.username}`} className="flex gap-4">
               <div className={
                 `${type !== "status" && "hidden"} 
-                relative w-10 h-10 rounded-full overflow-hidden`
+                relative w-10 h-10 rounded-full overflow-hidden -z-10`
               }>
                 <Image
                   path={originalPost.user.img || "general/noAvatar.png"}
