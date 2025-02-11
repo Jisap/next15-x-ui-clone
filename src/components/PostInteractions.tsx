@@ -1,17 +1,20 @@
 "use client";
 
 import { likePost, rePost, savePost } from "@/action";
+import { socket } from "@/socket";
 import { useUser } from "@clerk/nextjs";
 import { useOptimistic, useState } from "react";
 
 
 const PostInteractions = ({ 
+  username,
   postId,
   count, 
   isLiked,
   isRePosted,
   isSaved,
 } : {
+  username: string;
   postId:number;
   count:{ likes:number; rePosts:number; comments:number; }
   isLiked: boolean;
@@ -30,9 +33,22 @@ const PostInteractions = ({
   });
 
   const likeAction = async () => {                             // Cuando se le da click al botón de like
+    if (!user) return;
+
+    if (!optimisticCount.isLiked) {                            // Si el estado optimisticCount no es liked
+      socket.emit("sendNotification", {                        // Se envía un evento al servidor
+        receiverUsername: username,                            // Para que el usuario creador del post reciba una notificación
+        data: {
+          senderUsername: user.username,                       // Se le envía el nombre del usuario que le dio like
+          type: "like",                                        // tipo: like
+          link: `/${username}/status/${postId}`,               // y el link al post
+        },
+      });
+    }
+    
     addOptimisticCount("like")                                 // 1. Actualiza inmediatamente el estado optimista
     await likePost(postId)                                     // 2. Hace la petición al servidor
-    setState((prev) => {                                       // 3. Actualiza el estado real una vez completada la petición
+    setState((prev) => {                                       // 3. Actualiza el estado real una vez completada la petición -> Se sincroniza con el estado de optimisticCount
       return {
         ...prev,
         likes: prev.isLiked ? prev.likes - 1 : prev.likes + 1,

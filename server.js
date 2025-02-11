@@ -1,6 +1,7 @@
 import { createServer } from "node:http";
 import next from "next";
 import { Server } from "socket.io";
+import { v4 as uuidv4 } from "uuid";
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -41,7 +42,18 @@ app.prepare().then(() => {
     socket.on("disconnect", () => {              // Cuando el cliente se desconecta del servidor, 
       removeUser(socket.id);                     // llama a la función removeUser para eliminar el usuario de la lista de conectados.
     });
+
+    socket.on("sendNotification", ({ receiverUsername, data }) => {  // Cuando el cliente envía un evento "sendNotification" al servidor, se ejecuta esta función.
+      const receiver = getUser(receiverUsername);                    // Se identifica al usuario que recibe la notificación.
+
+      io.to(receiver.socketId).emit("getNotification", {             // Se envía un evento "getNotification" al usuario que debe recibir la notificación.
+        id: uuidv4(),
+        ...data,
+      });
+    });
+
   });
+
 
   httpServer
     .once("error", (err) => {

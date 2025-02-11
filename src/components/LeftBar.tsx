@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import Image from './Image';
 import Socket from './Socket';
+import Notification from './Notification';
 
 const LeftBar = () => {
 
@@ -19,12 +20,12 @@ const LeftBar = () => {
       link: "/",
       icon: "explore.svg",
     },
-    {
-      id: 3,
-      name: "Notification",
-      link: "/",
-      icon: "notification.svg",
-    },
+    // {
+    //   id: 3,
+    //   name: "Notification",
+    //   link: "/",
+    //   icon: "notification.svg",
+    // },
     {
       id: 4,
       name: "Messages",
@@ -83,22 +84,31 @@ const LeftBar = () => {
           />
         </Link>
         <div className='flex flex-col gap-4'>
-          {menuList.map((item) => (
-            <Link 
-              href={item.link} 
-              key={item.id}
-              className='p-2 rounded-full hover:bg-[#181818] flex items-center gap-4'  
-            >
-              <Image 
-                path={`icons/${item.icon}`}
-                alt={item.name}
-                w={24}
-                h={24}
-              />
-              <span className='hidden xxl:inline'>
-                {item.name}
-              </span>
-            </Link>
+          {menuList.map((item, i) => (
+            <>
+            
+            {i===2 && (   
+                <div key="custom-item">
+                  <Notification />
+                </div>
+            )}
+           
+              <Link 
+                href={item.link} 
+                key={item.id}
+                className='p-2 rounded-full hover:bg-[#181818] flex items-center gap-4'  
+              >
+                <Image 
+                  path={`icons/${item.icon}`}
+                  alt={item.name}
+                  w={24}
+                  h={24}
+                />
+                <span className='hidden xxl:inline'>
+                  {item.name}
+                </span>
+              </Link>
+            </>
           ))}
         </div>
         {/* button */}
