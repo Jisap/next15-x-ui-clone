@@ -58,6 +58,19 @@ const PostInteractions = ({
   };
 
   const rePostAction = async () => {
+    if (!user) return;
+
+    if (!optimisticCount.isRePosted) {
+      socket.emit("sendNotification", {
+        receiverUsername: username,
+        data: {
+          senderUsername: user.username,
+          type: "rePost",
+          link: `/${username}/status/${postId}`,
+        },
+      });
+    }
+
     addOptimisticCount("rePost")
     await rePost(postId)
     setState((prev) => {                                       
