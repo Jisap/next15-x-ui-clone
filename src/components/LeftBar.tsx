@@ -87,11 +87,11 @@ const LeftBar = () => {
           {menuList.map((item, i) => (
             <>
             
-            {i===2 && (   
-                <div key="custom-item">
-                  <Notification />
-                </div>
-            )}
+              {i===2 && (   
+                  <div key="custom-item">
+                    <Notification />
+                  </div>
+              )}
            
               <Link 
                 href={item.link} 
