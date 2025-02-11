@@ -88,7 +88,7 @@ const LeftBar = () => {
             <>
             
               {i===2 && (   
-                  <div key="custom-item">
+                  <div key="custom-item" className='z-50'>
                     <Notification />
                   </div>
               )}
