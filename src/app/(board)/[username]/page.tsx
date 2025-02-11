@@ -24,7 +24,7 @@ const UserPage = async ({ params }: { params: Promise<{ username: string }>}) =>
 
 
   return (
-    <div>
+    <div className="">
       {/* Profile Title */}
       <div className="flex items-center gap-8 sticky top-0 backdrop-blur-md p-4 z-10 bg-[#00000084]">
         <Link href="/">
@@ -38,7 +38,7 @@ const UserPage = async ({ params }: { params: Promise<{ username: string }>}) =>
         <h1 className="font-bold text-lg">{user.displayName}</h1>
       </div>
 
-      <div className="">
+      <div className="relative -z-10">
         {/* Cover & avatar container */}
         <div className="relative w-full">
           <div className="w-full aspect-[3/1] relative">

@@ -43,9 +43,6 @@ export default function Socket() {
   }, [user]);
 
   return (
-    <div>
-      <p>Status: {isConnected ? "connected" : "disconnected"}</p>
-      <p>Transport: {transport}</p>
-    </div>
+    <span></span>
   );
 }

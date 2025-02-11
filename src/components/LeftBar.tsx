@@ -4,8 +4,13 @@ import React from 'react'
 import Image from './Image';
 import Socket from './Socket';
 import Notification from './Notification';
+import { currentUser } from '@clerk/nextjs/server';
+import Logout from './Logout';
 
-const LeftBar = () => {
+const LeftBar = async () => {
+
+  const user = await currentUser();
+
 
   const menuList = [
     {
@@ -76,7 +81,7 @@ const LeftBar = () => {
       {/* Logo Menu Button */}
       <div className='flex flex-col gap-4 text-lg items-center xxl:items-start'>
         <Link href="/" className='p-2 rounded-full hover:bg-[#181818]'>
-          <Image 
+          <Image
             path="icons/logo.svg"
             alt="Logo"
             w={24}
@@ -86,34 +91,34 @@ const LeftBar = () => {
         <div className='flex flex-col gap-4'>
           {menuList.map((item, i) => (
             <>
-            
-              {i===2 && (   
-                  <div key="custom-item" className='z-50'>
+              <div key={item.id || i}>
+                {i === 2 && (
+                  <div className='z-50'>
                     <Notification />
                   </div>
-              )}
-           
-              <Link 
-                href={item.link} 
-                key={item.id}
-                className='p-2 rounded-full hover:bg-[#181818] flex items-center gap-4'  
-              >
-                <Image 
-                  path={`icons/${item.icon}`}
-                  alt={item.name}
-                  w={24}
-                  h={24}
-                />
-                <span className='hidden xxl:inline'>
-                  {item.name}
-                </span>
-              </Link>
+                )}
+
+                <Link
+                  href={item.link}
+                  className='p-2 rounded-full hover:bg-[#181818] flex items-center gap-4'
+                >
+                  <Image
+                    path={`icons/${item.icon}`}
+                    alt={item.name}
+                    w={24}
+                    h={24}
+                  />
+                  <span className='hidden xxl:inline'>
+                    {item.name}
+                  </span>
+                </Link>
+              </div>
             </>
           ))}
         </div>
         {/* button */}
         <Link href="/compose/post" className=' bg-white text-black rounded-full w-12 h-12 flex items-center justify-center xxl:hidden'>
-          <Image 
+          <Image
             path="icons/post.svg"
             alt="new post"
             w={24}
@@ -124,25 +129,34 @@ const LeftBar = () => {
           Post
         </Link>
       </div>
+
+      {user && (
+        <>
+          <Socket />
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-2'>
+              <div className='w-10 h-10 relative rounded-full overflow-hidden'>
+                <Image
+                  src={ user?.imageUrl }
+                  alt="avatar"
+                  w={100}
+                  h={100}
+                  tr={true}
+                  className='scale-75 rounded-full'
+                />
+              </div>
+              <div className='hidden xxl:flex flex-col'>
+                <span className='font-bold'>{user?.username}</span>
+                <span className='text-sm text-textGray'>@{user?.username}</span>
+              </div>
+            </div>
+            {/* <div className='hidden xxl:block cursor-pointer font-bold'>...</div> */}
+            <Logout />
+          </div>
+        </>
+
+      )}
       {/* User */}
-      <div className='flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          <div className='w-10 h-10 relative rounded-full overflow-hidden'>
-            <Image 
-              path="/general/avatar.png"
-              alt="avatar"
-              tr={true}
-              className='scale-75'
-            />
-          </div>
-          <div className='hidden xxl:flex flex-col'>
-            <span className='font-bold'>Jisap</span>
-            <span className='text-sm text-textGray'>@jisap</span>
-          </div>
-        </div>
-        <div className='hidden xxl:block cursor-pointer font-bold'>...</div>
-      </div>
-      <Socket />
     </div>
   )
 }
