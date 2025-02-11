@@ -45,12 +45,19 @@ const Notification = () => {
         className='cursor-pointer p-2 rounded-full hover:bg-[#181818] flex items-center gap-4'
         onClick={() => setOpen((prev) => !prev)}
       >
-        <Image
-          path={`icons/notification.svg`}
-          alt="notification"
-          w={24}
-          h={24}
-        />
+        <div className="relative">
+          <Image
+            path={`icons/notification.svg`}
+            alt="notification"
+            w={24}
+            h={24}
+          />
+          {notifications.length > 0 && (
+            <div className="absolute -top-4 -right-4 w-6 h-6 bg-iconBlue p-2 rounded-full flex items-center justify-center text-sm">
+              {notifications.length}
+            </div>
+          )}
+        </div>
         <span className='hidden xxl:inline'>
           Notifications
         </span>
