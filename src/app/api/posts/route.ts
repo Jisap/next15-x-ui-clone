@@ -31,23 +31,21 @@ export async function GET(request: NextRequest) {
         },
       };
 
+  const postIncludeQuery = {
+    user: { select: { displayName: true, username: true, img: true } },
+    _count: { select: { likes: true, rePosts: true, comments: true } },
+    likes: { where: { userId: userId }, select: { id: true } },
+    rePosts: { where: { userId: userId }, select: { id: true } },
+    saves: { where: { userId: userId }, select: { id: true } },
+  };
+
   const posts = await prisma.post.findMany({
     where: whereCondition,
-    include: { 
-      user: { select: { displayName: true, username: true, img: true } },    // Información del usuario que creo la publicación
-      rePost: {                                                              // Información sobre la publicación original si la publicación actual es un reenvío
-        include: {
-          user: { select: { displayName: true, username: true, img: true } },
-          _count: { select: { likes: true, rePosts: true, comments: true } },  // Información sobre la cantidad de likes, reposts y comentarios,
-          likes: { where: { userId: userId }, select: { id: true } },
-          rePosts: { where: { userId: userId }, select: { id: true } },
-          saves: { where: { userId: userId }, select: { id: true } },
-        },
+    include: {
+      rePost: {
+        include: postIncludeQuery,
       },
-      _count: {select: { likes: true, rePosts: true, comments: true } },       // Información sobre la cantidad de likes, reposts y comentarios  
-      likes: { where: { userId: userId }, select: { id: true } },
-      rePosts: { where: { userId: userId }, select: { id: true } },
-      saves: { where: { userId: userId }, select: { id: true } },
+      ...postIncludeQuery,
     },
     take: LIMIT,
     skip: (Number(page) - 1) * LIMIT,
@@ -55,33 +53,11 @@ export async function GET(request: NextRequest) {
   });
 
 
-
-  // const postIncludeQuery = {
-  //   user: { select: { displayName: true, username: true, img: true } },
-  //   _count: { select: { likes: true, rePosts: true, comments: true } },
-  //   likes: { where: { userId: userId }, select: { id: true } },
-  //   rePosts: { where: { userId: userId }, select: { id: true } },
-  //   saves: { where: { userId: userId }, select: { id: true } },
-  // };
-
-  // const posts = await prisma.post.findMany({
-  //   where: whereCondition,
-  //   include: {
-  //     rePost: {
-  //       include: postIncludeQuery,
-  //     },
-  //     ...postIncludeQuery,
-  //   },
-  //   take: LIMIT,
-  //   skip: (Number(page) - 1) * LIMIT,
-  //   orderBy: { createdAt: "desc" }
-  // });
-
   const totalPosts = await prisma.post.count({ where: whereCondition });
 
   const hasMore = Number(page) * LIMIT < totalPosts;
 
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  //await new Promise((resolve) => setTimeout(resolve, 2000));
 
   return Response.json({ posts, hasMore });
 }

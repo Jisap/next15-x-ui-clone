@@ -3,45 +3,29 @@ import Image from './Image'
 import PostInfo from './PostInfo'
 import PostInteractions from './PostInteractions'
 import Link from 'next/link';
-import { Post as PostType } from '@prisma/client';
+import { Post as PostType } from '@prisma/client';                           // Representa la estructura básica de una publicación
 import { format } from 'timeago.js';
 import Video from './Video';
 
+type UserSummary = {                                                         // Contiene información resumida del usuario que creó la publicación,            
+  displayName: string | null;
+  username: string;
+  img: string | null;
+};
 
-type PostWithDetails = PostType & { // Post + info del user que creo la publicación + info de los post reenviados (usuarios que crearon su post)
-  user: {
-    displayName: string | null;
-    username: string;
-    img: string | null;
-  };
-
-  rePost?: (
-    PostType & {
-      user: {
-        displayName: string | null;
-        username: string;
-        img: string | null;
-      };
-      _count: {
-        likes: number;
-        rePosts: number;
-        comments: number;
-      };
-      likes: {id: number}[];
-      rePosts: {id: number}[];
-      saves: {id: number}[];
-
-    }) | null;
-
-  _count: {
-    likes: number;
-    rePosts: number;
-    comments: number;
-  };
-  likes: { id: number }[]; 
+type Engagement = {                                                           //  Incluye información sobre las interacciones con la publicación   
+  _count: { likes: number; rePosts: number; comments: number };
+  likes: { id: number }[];
   rePosts: { id: number }[];
   saves: { id: number }[];
-}
+};
+      
+type PostWithDetails = PostType &
+  Engagement & {
+    user: UserSummary;
+  rePost?: (    // Es opcional y representa una publicación que ha sido repostada.  Si existe, contiene la misma estructura que PostWithDetails, incluyendo la información del usuario que creó la publicación original y las interacciones asociadas
+      PostType & Engagement & { user: UserSummary }) | null;
+  };
 
 const Post = ({ 
   type, 
